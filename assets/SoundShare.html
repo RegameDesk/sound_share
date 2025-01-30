@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>声音共享</title>
+	<link rel="stylesheet" type="text/css" href="umu-red.css" />
+</head>
+<body>
+	<p id="donate" class="donate" align="right">如果<span style="color: red;">喜欢</span>本程序，可以<a href="donate.html" target="_blank">资助</a>作者继续完善！</p>
+	<div class="container">
+		<!-- 步骤 1 -->
+		<div id="step1" class="step">
+			<h2 id="step1_title">应用场景</h2>
+			<p id="step1_text">如果您的电脑扬声器音质不佳，或者根本没有扬声器，别担心！只要您拥有一部音质出色的手机或平板，通过<strong>声音共享</strong>您就可以将电脑的音频实时传输到移动设备上播放，享受更清晰、更震撼的音效体验！</p>
+			<div class="nav-buttons">
+				<div></div>
+				<button id="step1_next" onclick="nextStep(2)">下一步</button>
+			</div>
+		</div>
+		<!-- 步骤 2 -->
+		<div id="step2" class="step hidden">
+			<h2 id="step2_title">版权信息</h2>
+			<p id="step2_text"><strong>声音共享</strong>是免费软件，任何人不得进行二次销售！如果觉得它有用，请您帮忙推广、<a href="donate.html" target="_blank">资助</a>，万分感谢！</p>
+			<div class="nav-buttons">
+				<button id="step2_back" onclick="prevStep(1)">上一步</button>
+				<button id="step2_next" onclick="nextStep(3)">下一步</button>
+			</div>
+		</div>
+		<!-- 步骤 3 -->
+		<div id="step3" class="step hidden">
+			<h2 id="step3_title">使用方法</h2>
+			<p id="step3_text">请打开您的手机或平板的浏览器，输入以下地址：</p>
+			<p id="addresses">http://IP:1216（此功能正在实现……请您先找下自己的 IP）</p>
+			<div class="nav-buttons">
+				<button id="step3_back" onclick="prevStep(2)">上一步</button>
+				<button id="step3_next" onclick="nextStep(4)">下一步</button>
+			</div>
+		</div>
+		<!-- 步骤 4 -->
+		<div id="step4" class="step hidden">
+			<h2 id="step4_title">高级设置</h2>
+			<p id="step4_text">以下功能需要修改注册表，并重开本应用后生效：</p>
+			<ul>
+				<li id="ipv6"><b>启用 IPv6：</b>为安全考虑，默认禁用 IPv6！<a href="ipv6.png" target="_blank">查看</a>（开发中……）</li>
+				<li id="log"><b>日志设定：</b>修改日志的开关、保存路径、等级。<a href="log.png" target="_blank">查看</a></li>
+				<li id="port"><b>监听端口：</b>修改绑定地址和监听端口。<a href="port.png" target="_blank">查看</a></li>
+			</ul>
+			<div class="nav-buttons">
+				<button id="step4_back" onclick="prevStep(3)">上一步</button>
+				<button id="step4_next" onclick="nextStep(5)">下一步</button>
+			</div>
+		</div>
+		<!-- 步骤 5 -->
+		<div id="step5" class="step hidden">
+			<h2 id="step5_title">故障诊断</h2>
+			<p id="step5_text">常见问题的修复方法：</p>
+			<ul>
+				<li id="no_audio_device"><b>系统没有声卡驱动？</b>安装虚拟声卡即可！<a href="https://download.vb-audio.com/Download_CABLE/VoicemeeterSetup_v1119.zip" target="_blank">下载</a></li>
+			</ul>
+			<div class="nav-buttons">
+				<button id="step5_back" onclick="prevStep(4)">上一步</button>
+				<button id="step5_next" onclick="nextStep(6)">下一步</button>
+			</div>
+		</div>
+		<!-- 完成 -->
+		<div id="step6" class="step hidden">
+			<h2 id="step6_title">完成！</h2>
+			<p id="step6_text">恭喜！您已经掌握<strong>声音共享</strong>的基本使用方法。</p>
+			<div class="nav-buttons">
+				<button id="step6_back" onclick="prevStep(5)">上一步</button>
+				<button id="restart" onclick="restart()">重新开始</button>
+			</div>
+		</div>
+	</div>
+	<script src="mui.js"></script>
+	<script>
+		mui(['zh-CN', 'en-US'], 'ss-')
+		function nextStep(step) {
+			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+			document.getElementById(`step${step}`).classList.remove('hidden');
+		}
+
+		function prevStep(step) {
+			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+			document.getElementById(`step${step}`).classList.remove('hidden');
+		}
+
+		function restart() {
+			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+			document.getElementById('step1').classList.remove('hidden');
+		}
+	</script>
+</body>
+</html>

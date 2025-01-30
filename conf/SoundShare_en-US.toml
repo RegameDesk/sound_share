@@ -1,0 +1,17 @@
+[strings]
+e_wv2_rt_setup_unknown = "WebView Runtime Installation Encountered Unknown Error!"
+e_wv2_rt_setup_download = "WebView Bootstrapper failled to download!"
+e_wv2_rt_setup_install = "WebView Runtime failed to install!"
+e_wv2_rt_env_not_found = "Couldn't find WebView2 Runtime!\r\nDo you have a version installed?"
+e_wv2_rt_env_exists = "User data folder cannot be created because a file with the same name already exists."
+e_wv2_rt_env_access_denied = "Unable to create user data folder, Access Denied!"
+e_wv2_rt_env_fail = "WebView2 Runtime unable to start!"
+e_wv2_rt_ctrl_null = "No CoreWebView2 controller is created!"
+
+ef_wv2_rt_env = "Create WebView2 environment failed! (Error code: {:#x})"
+ef_wv2_rt_ctrl = "Create WebView2 controller failed! (Error code: {:#x})"
+ef_wv2_rt_core_get = "Get CoreWebView2 failed! (Error code: {:#x})"
+ef_wv2_rt_core_2 = "Query CoreWebView2 failed! (Error code: {:#x})"
+ef_wv2_rt_core_pid = "Query browser process ID failed! (Error code: {:#x})"
+
+i_installing_wv2_rt = "WebView2 Runtime is not installed!\r\nThe program is downloading it in the background.\r\nPlease keep your internet connection active and don't close this program!"

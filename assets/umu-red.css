@@ -1,0 +1,57 @@
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+	background-color: #f9f9f9;
+	color: #333;
+}
+h1, h2 {
+	color: #850000;
+}
+.container {
+	max-width: 600px;
+	margin: 32px auto;
+	padding: 16px;
+	background: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+}
+.donate {
+	margin: 8px;
+}
+.step {
+	margin-bottom: 24px;
+}
+.step h2 {
+	margin-bottom: 10px;
+}
+.step p {
+	margin: 8px;
+	text-indent: 2em;
+}
+.step img {
+	max-width: 100%;
+	border-radius: 8px;
+	margin-top: 10px;
+}
+.nav-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+.nav-buttons button {
+	padding: 10px 20px;
+	background-color: #850000;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+.nav-buttons button:hover {
+	background-color: #85554D;
+}
+.hidden {
+	display: none;
+}

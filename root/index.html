@@ -1,0 +1,24 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sound Share</title>
+	<link rel="icon" sizes="32x32" href="favicon-32x32.png" type="image/png">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Sound Share</h1>
+		<p><b>Client ID: </b><span id="clientId"></span></p>
+		<p>
+			<button id="start" disabled>Start</button>
+			<button id="stop" style="display: none" onclick="stop()">Stop</button>
+		</p>
+		<div id="error" style="display: none"></div>
+		<div id="media" style="display: none">
+			<audio id="audio" autoplay playsinline></audio>
+		</div>
+	</div>
+	<script src="client.js"></script>
+</body>
+</html>

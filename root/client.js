@@ -1,0 +1,190 @@
+const pcMap = new Map()
+
+const clientId = randomId(7)
+document.getElementById('clientId').textContent = clientId
+
+const url = 'ws://' + window.location.host + '/' + clientId
+openSignaling(url).then((ws) => {
+  console.log('WebSocket connected, signaling ready')
+  const startButton = document.getElementById('start')
+  startButton.disabled = false
+  startButton.onclick = () => start(ws)
+}).catch((err) => {
+  document.getElementById('error').textContent = err
+})
+
+function createPeerConnection(ws, id) {
+  const config = {bundlePolicy: "max-bundle"}
+  const pc = new RTCPeerConnection(config)
+  
+  pc.addEventListener('iceconnectionstatechange', () =>
+    console.log('iceConnectionState: ' + pc.iceConnectionState))
+  console.log('iceConnectionState: ' + pc.iceConnectionState)
+
+  pc.addEventListener('icegatheringstatechange', () =>
+    console.log('iceGatheringState: ' + pc.iceGatheringState))
+  console.log('iceGatheringState: ' + pc.iceGatheringState)
+
+  pc.addEventListener('signalingstatechange', () =>
+    console.log('signalingState: ' + pc.signalingState))
+  console.log('signalingState: ' + pc.signalingState)
+  
+  pc.ontrack = (evt) => {
+    // document.getElementById('media').style.display = 'block';
+    const audio = document.getElementById('audio')
+    audio.srcObject = evt.streams[0]
+    audio.play()
+  }
+  
+  pcMap.set(id, pc)
+  return pc
+}
+
+async function handleOffer(ws, offer) {
+    const pc = createPeerConnection();
+    await pc.setRemoteDescription(offer);
+    await sendAnswer(ws, pc);
+}
+
+function offerPeerConnection(ws, id) {
+  console.log(`Offering to ${id}`)
+  const pc = createPeerConnection(ws, clientId)
+  sendOfferLocalDescription(ws, id, pc)
+}
+
+function openSignaling (url) {
+  console.log('Connecting to signaling: ' + url)
+  return new Promise((resolve, reject) => {
+    const ws = new WebSocket(url)
+
+    ws.onopen = () => resolve(ws)
+    ws.onerror = () => {
+      document.getElementById('start').disabled = true
+      reject(new Error('WebSocket error'))
+    }
+    ws.onclose = () => {
+      console.error('WebSocket disconnected')
+      document.getElementById('start').disabled = true
+    }
+    ws.onmessage = (e) => {
+      if (typeof (e.data) !== 'string') return
+
+      const msg = JSON.parse(e.data)
+      const { id, type } = msg
+      const pc = pcMap.get(id)
+      if (!pc) {
+        if (type != 'offer') {
+          console.log('Invalid message:', msg)
+          return
+        }
+      }
+
+      switch (type) {
+        case 'offer':
+          handleOffer(ws, msg)
+          break
+        case 'answer':
+          console.warn('Got an ' + type + ', ignore it!')
+          break
+        case 'candidate':
+          pc.addIceCandidate({
+            candidate: msg.candidate,
+            sdpMid: msg.mid
+          })
+          break
+      }
+    }
+  })
+}
+
+function randomId (length) {
+  // base58
+  const characters = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+  const pickRandom = () => characters.charAt(Math.floor(Math.random() * characters.length))
+  return [...Array(length)].map(pickRandom).join('')
+}
+
+async function sendAnswer(ws, pc) {
+    await pc.setLocalDescription(await pc.createAnswer())
+    await waitGatheringComplete(pc)
+
+    const answer = pc.localDescription
+
+    ws.send(JSON.stringify({
+        id: "SoundShare",
+        type: answer.type,
+        sdp: answer.sdp,
+    }))
+}
+
+function sendOfferLocalDescription(ws, id, pc) {
+  const options = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: false,
+    iceRestart: false
+  }
+  pc.createOffer(options)
+    .then((desc) => pc.setLocalDescription(desc))
+    .then(() => {
+      const {sdp, type} = pc.localDescription;
+      ws.send(JSON.stringify({id, type, sdp}))
+    })
+}
+
+function sendRequest(ws, id) {
+    ws.send(JSON.stringify({
+        id,
+        type: "request",
+    }));
+}
+
+function start(ws) {
+  document.getElementById('start').style.display = 'none'
+  document.getElementById('stop').style.display = 'inline-block'
+  document.getElementById('media').style.display = 'block'
+  sendRequest(ws, 'SoundShare')
+}
+
+function stop() {
+  document.getElementById('stop').style.display = 'none'
+  document.getElementById('media').style.display = 'none'
+  document.getElementById('start').style.display = 'inline-block'
+
+  pcMap.forEach((pc, id) => {
+    if (pc === null) return
+    console.log('Closing', id)
+    
+    if (pc.getTransceivers) {
+      pc.getTransceivers().forEach((transceiver) => {
+        if (transceiver.stop) {
+          transceiver.stop()
+        }
+      })
+    }
+
+    pc.getSenders().forEach((sender) => {
+      const track = sender.track
+      if (track !== null) {
+        sender.track.stop()
+      }
+    })
+
+    pc.close()
+    pc = null
+  })
+  pcMap.clear()
+}
+
+async function waitGatheringComplete(pc) {
+    return new Promise((resolve) => {
+        if (pc.iceGatheringState === 'complete') {
+            resolve()
+        } else {
+            pc.addEventListener('icegatheringstatechange', () => {
+                if (pc.iceGatheringState === 'complete') {
+                    resolve()
+                }
+            })
+        }
+    })
+}

@@ -1,0 +1,17 @@
+[strings]
+e_wv2_rt_setup_unknown = "WebView2 运行时的安装过程遇到未知错误！"
+e_wv2_rt_setup_download = "WebView2 引导程序下载失败！"
+e_wv2_rt_setup_install = "WebView2 运行时安装失败！"
+e_wv2_rt_env_not_found = "找不到 WebView2 运行时!\r\n您是否已经安装？"
+e_wv2_rt_env_exists = "用户数据文件夹无法被创建，已经同名文件夹已经存在。"
+e_wv2_rt_env_access_denied = "无法创建用户数据文件夹，拒绝访问！"
+e_wv2_rt_env_fail = "WebView2 运行时无法启动！"
+e_wv2_rt_ctrl_null = "CoreWebView2 控制器没被创建！"
+
+ef_wv2_rt_env = "创建 WebView2 环境失败！（错误码：{:#x}）"
+ef_wv2_rt_ctrl = "创建 WebView2 控制器失败！（错误码：{:#x}）"
+ef_wv2_rt_core_get = "获取 CoreWebView2 失败！（错误码：{:#x}）"
+ef_wv2_rt_core_2 = "查询 CoreWebView2 失败！（错误码：{:#x}）"
+ef_wv2_rt_core_pid = "查询浏览器进程号失败！（错误码：{:#x}）"
+
+i_installing_wv2_rt = "您的系统缺少 WebView2 运行时，程序正在后台下载。\r\n请保持网络畅通，且勿关闭此程序！"
