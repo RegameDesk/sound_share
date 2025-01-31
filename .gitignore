@@ -1,0 +1,13 @@
+# VS
+.vs/
+bak/
+bin/
+tmp/
+x64/
+*.aps
+*.bak
+*.tmp
+*.vcxproj.user
+
+# macOS
+.DS_Store
