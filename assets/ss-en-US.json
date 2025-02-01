@@ -17,6 +17,7 @@
 	"ipv6": "<b>Enable IPv6:</b> Disabled by default for security reasons! <a href=\"ipv6.png\" target=\"_blank\">View</a>",
 	"log": "<b>Log Settings:</b> Modify Log Toggle, Save Path, and Level. <a href=\"log.png\" target=\"_blank\">View</a>",
 	"port": "<b>Listening Port:</b> Modify Binding Address and Listening Port. <a href=\"port.png\" target=\"_blank\">View</a>",
+	"audio_bitrate": "<b>Audio Bitrate:</b> Set the audio bitrate. range [64000, 512000], default to 128000. <a href=\"audio_bitrate.png\" target=\"_blank\">View</a>",
 	"mute": "<b>Mute Policy:</b> When connected, it mutes automatically. Options: Do not mute, Mute once, Keep muted. <a href=\"mute.png\" target=\"_blank\">View</a>",
 	"step4_back": "Back",
 	"step4_next": "Next",
