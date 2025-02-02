@@ -2,13 +2,13 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sound Share</title>
+	<title>SoundShare</title>
 	<link rel="icon" sizes="32x32" href="favicon-32x32.png" type="image/png">
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<div class="container">
-		<h1>Sound Share</h1>
+		<h1>SoundShare</h1>
 		<p><b>Client ID: </b><span id="clientId"></span></p>
 		<p>
 			<button id="start" disabled>Start</button>
@@ -18,6 +18,17 @@
 		<div id="media" style="display: none">
 			<audio id="audio" autoplay playsinline></audio>
 		</div>
+	</div>
+	<div class="keys">
+		<button id="VK_VOLUME_MUTE" style="display: none">Mute</button>
+		<button id="VK_VOLUME_DOWN" style="display: none">Vol-</button>
+		<button id="VK_VOLUME_UP" style="display: none">Vol+</button>
+	</div>
+	<div class="keys">
+		<button id="VK_MEDIA_PREV_TRACK" style="display: none">∣◀</button>
+		<button id="VK_MEDIA_PLAY_PAUSE" style="display: none">‖</button>
+		<button id="VK_MEDIA_NEXT_TRACK" style="display: none">▶∣</button>
+		<button id="VK_MEDIA_STOP" style="display: none">■</button>
 	</div>
 	<script src="client.js"></script>
 </body>

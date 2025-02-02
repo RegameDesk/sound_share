@@ -9,8 +9,15 @@ openSignaling(url).then((ws) => {
   const startButton = document.getElementById('start')
   startButton.disabled = false
   startButton.onclick = () => start(ws)
+  
+  const names = ['VK_VOLUME_MUTE', 'VK_VOLUME_DOWN', 'VK_VOLUME_UP', 'VK_MEDIA_NEXT_TRACK', 'VK_MEDIA_PREV_TRACK', 'VK_MEDIA_STOP', 'VK_MEDIA_PLAY_PAUSE']
+  for (const name of names) {
+    const btn = document.getElementById(name)
+    btn.style.display = 'block'
+    btn.onclick = () => sendKey(ws, btn.id)
+  }
 }).catch((err) => {
-  document.getElementById('error').textContent = err
+  showError(err)
 })
 
 function createPeerConnection(ws, id) {
@@ -30,7 +37,7 @@ function createPeerConnection(ws, id) {
   console.log('signalingState: ' + pc.signalingState)
   
   pc.ontrack = (evt) => {
-    // document.getElementById('media').style.display = 'block';
+    // document.getElementById('media').style.display = 'block'
     const audio = document.getElementById('audio')
     audio.srcObject = evt.streams[0]
     audio.play()
@@ -117,6 +124,10 @@ async function sendAnswer(ws, pc) {
     }))
 }
 
+function sendKey(ws, name) {
+  ws.send(JSON.stringify({id : 'SoundShare', type : 'key', name}))
+}
+
 function sendOfferLocalDescription(ws, id, pc) {
   const options = {
     offerToReceiveAudio: true,
@@ -124,10 +135,13 @@ function sendOfferLocalDescription(ws, id, pc) {
     iceRestart: false
   }
   pc.createOffer(options)
-    .then((desc) => pc.setLocalDescription(desc))
+    .then((offer) => pc.setLocalDescription(offer))
     .then(() => {
-      const {sdp, type} = pc.localDescription;
+      const {sdp, type} = pc.localDescription
       ws.send(JSON.stringify({id, type, sdp}))
+    })
+    .catch((reason) => {
+      showError(reason)
     })
 }
 
@@ -136,6 +150,12 @@ function sendRequest(ws, id) {
         id,
         type: "request",
     }));
+}
+
+function showError(error_text) {
+  const err = document.getElementById('error')
+  err.textContent = error_text
+  err.style.display = 'block'
 }
 
 function start(ws) {
