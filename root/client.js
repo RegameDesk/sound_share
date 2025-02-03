@@ -2,6 +2,7 @@ const pcMap = new Map()
 
 const clientId = randomId(7)
 document.getElementById('clientId').textContent = clientId
+let audioContext
 
 const url = 'ws://' + window.location.host + '/' + clientId
 openSignaling(url).then((ws) => {
@@ -37,18 +38,26 @@ function createPeerConnection(ws, id) {
   console.log('signalingState: ' + pc.signalingState)
   
   pc.ontrack = (evt) => {
+    if (evt.track.kind !== 'audio') return
     // document.getElementById('media').style.display = 'block'
+    const selectedChannel = document.querySelector('input[name="channel"]:checked').value
     const audio = document.getElementById('audio')
-    audio.srcObject = evt.streams[0]
+    if (selectedChannel === 'stereo') {
+      audio.srcObject = evt.streams[0]
+    } else {
+      // not yet
+      audio.srcObject = evt.streams[0]
+    }
     audio.play()
   }
   
+  console.log('Add', id)
   pcMap.set(id, pc)
   return pc
 }
 
 async function handleOffer(ws, offer) {
-    const pc = createPeerConnection();
+    const pc = createPeerConnection(ws, clientId);
     await pc.setRemoteDescription(offer);
     await sendAnswer(ws, pc);
 }
@@ -78,6 +87,7 @@ function openSignaling (url) {
 
       const msg = JSON.parse(e.data)
       const { id, type } = msg
+      console.log('Got', type)
       const pc = pcMap.get(id)
       if (!pc) {
         if (type != 'offer') {
@@ -162,6 +172,7 @@ function start(ws) {
   document.getElementById('start').style.display = 'none'
   document.getElementById('stop').style.display = 'inline-block'
   document.getElementById('media').style.display = 'block'
+  document.getElementById('channel').style.display = 'none'
   sendRequest(ws, 'SoundShare')
 }
 
@@ -169,6 +180,7 @@ function stop() {
   document.getElementById('stop').style.display = 'none'
   document.getElementById('media').style.display = 'none'
   document.getElementById('start').style.display = 'inline-block'
+  // document.getElementById('channel').style.display = 'block'
 
   pcMap.forEach((pc, id) => {
     if (pc === null) return
