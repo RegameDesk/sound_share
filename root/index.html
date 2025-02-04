@@ -30,11 +30,17 @@
 		<button id="VK_MEDIA_NEXT_TRACK" style="display: none">▶∣</button>
 		<button id="VK_MEDIA_STOP" style="display: none">■</button>
 	</div>
-	<div id="channel" class="advanced" style="display: none">
-		<input type="radio" id="only_left" name="channel" value="only_left" />Left Channel
-		<input type="radio" id="stereo" name="channel" value="stereo" checked />Stereo
-		<input type="radio" id="only_right" name="channel" value="only_right" />Right Channel
+	<h2>Advanced</h2>
+	<div id="channel" class="advanced">
+		<div><input type="radio" id="only_left" name="channel" value="only_left" /><label for="only_left">Left Channel</label></div>
+		<div><input type="radio" id="stereo" name="channel" value="stereo" checked /><label for="stereo">Stereo</label></div>
+		<div><input type="radio" id="only_right" name="channel" value="only_right" onchange="bugNote()" /><label for="only_right">Right Channel</label></div>
 	</div>
+	<script>
+	function bugNote() {
+		alert("Note: Some browsers don't support this function！")
+	}
+	</script>
 	<script src="client.js"></script>
 </body>
 </html>

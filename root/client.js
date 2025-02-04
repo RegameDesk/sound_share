@@ -45,8 +45,24 @@ function createPeerConnection(ws, id) {
     if (selectedChannel === 'stereo') {
       audio.srcObject = evt.streams[0]
     } else {
-      // not yet
-      audio.srcObject = evt.streams[0]
+      if (!audioContext) {
+        audioContext = new AudioContext()
+      }
+      const source = audioContext.createMediaStreamSource(evt.streams[0])
+      const splitter = audioContext.createChannelSplitter(2)
+      source.connect(splitter)
+      const merger = audioContext.createChannelMerger(2)
+      let ch = 0
+      if (selectedChannel === 'only_right') ch = 1
+      // const gainNode = audioContext.createGain()
+      // gainNode.gain.value = 0.0
+      // splitter.connect(gainNode, 0)
+      // gainNode.connect(merger, 0, 0)
+      splitter.connect(merger, ch, 0)
+      splitter.connect(merger, ch, 1)
+      const destination = audioContext.createMediaStreamDestination()
+      merger.connect(destination)
+      audio.srcObject = destination.stream
     }
     audio.play()
   }
@@ -172,7 +188,9 @@ function start(ws) {
   document.getElementById('start').style.display = 'none'
   document.getElementById('stop').style.display = 'inline-block'
   document.getElementById('media').style.display = 'block'
-  document.getElementById('channel').style.display = 'none'
+  document.getElementById('only_left').disabled = true
+  document.getElementById('stereo').disabled = true
+  document.getElementById('only_right').disabled = true
   sendRequest(ws, 'SoundShare')
 }
 
@@ -180,7 +198,9 @@ function stop() {
   document.getElementById('stop').style.display = 'none'
   document.getElementById('media').style.display = 'none'
   document.getElementById('start').style.display = 'inline-block'
-  // document.getElementById('channel').style.display = 'block'
+  document.getElementById('only_left').disabled = false
+  document.getElementById('stereo').disabled = false
+  document.getElementById('only_right').disabled = false
 
   pcMap.forEach((pc, id) => {
     if (pc === null) return
