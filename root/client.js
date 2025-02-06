@@ -2,7 +2,6 @@ const pcMap = new Map()
 
 const clientId = randomId(7)
 document.getElementById('clientId').textContent = clientId
-let audioContext
 
 const url = 'ws://' + window.location.host + '/' + clientId
 openSignaling(url).then((ws) => {
@@ -45,23 +44,22 @@ function createPeerConnection(ws, id) {
     if (selectedChannel === 'stereo') {
       audio.srcObject = evt.streams[0]
     } else {
-      if (!audioContext) {
-        audioContext = new AudioContext()
-      }
+      const audioContext = new AudioContext()
       const source = audioContext.createMediaStreamSource(evt.streams[0])
       const splitter = audioContext.createChannelSplitter(2)
       source.connect(splitter)
-      const merger = audioContext.createChannelMerger(2)
+      //const merger = audioContext.createChannelMerger(2)
       let ch = 0
       if (selectedChannel === 'only_right') ch = 1
       // const gainNode = audioContext.createGain()
       // gainNode.gain.value = 0.0
       // splitter.connect(gainNode, 0)
       // gainNode.connect(merger, 0, 0)
-      splitter.connect(merger, ch, 0)
-      splitter.connect(merger, ch, 1)
+      // splitter.connect(merger, ch, 0)
+      // splitter.connect(merger, ch, 1)
       const destination = audioContext.createMediaStreamDestination()
-      merger.connect(destination)
+      // merger.connect(destination)
+      splitter.connect(destination, ch)
       audio.srcObject = destination.stream
     }
     audio.play()
@@ -114,6 +112,7 @@ function openSignaling (url) {
 
       switch (type) {
         case 'offer':
+          // console.log(msg.sdp)
           handleOffer(ws, msg)
           break
         case 'answer':
@@ -138,16 +137,23 @@ function randomId (length) {
 }
 
 async function sendAnswer(ws, pc) {
-    await pc.setLocalDescription(await pc.createAnswer())
-    await waitGatheringComplete(pc)
+  let mono_answer = await pc.createAnswer()
+  const start_pos = mono_answer.sdp.indexOf('a=fmtp')
+  const end_pos = mono_answer.sdp.indexOf('\r\n', start_pos)
+  const line = mono_answer.sdp.substring(start_pos, end_pos)
+  if (-1 == line.indexOf('stereo=1')) {
+    mono_answer.sdp = mono_answer.sdp.slice(0, end_pos) + ';stereo=1' + mono_answer.sdp.slice(end_pos)
+  }
+  await pc.setLocalDescription(mono_answer)
+  await waitGatheringComplete(pc)
 
-    const answer = pc.localDescription
-
-    ws.send(JSON.stringify({
-        id: "SoundShare",
-        type: answer.type,
-        sdp: answer.sdp,
-    }))
+  const answer = pc.localDescription
+  // console.log(answer.sdp)
+  ws.send(JSON.stringify({
+    id: "SoundShare",
+    type: answer.type,
+    sdp: answer.sdp,
+  }))
 }
 
 function sendKey(ws, name) {
