@@ -178,10 +178,10 @@ function sendOfferLocalDescription(ws, id, pc) {
 }
 
 function sendRequest(ws, id) {
-    ws.send(JSON.stringify({
-        id,
-        type: "request",
-    }));
+  ws.send(JSON.stringify({
+    id,
+    type: "request",
+  }));
 }
 
 function showError(error_text) {
