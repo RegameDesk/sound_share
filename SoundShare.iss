@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SoundShare"
-#define MyAppVersion "2025.02.14"
+#define MyAppVersion "2025.02.19"
 #define MyAppPublisher "UMUTech"
 #define MyAppURL "https://umutech.com/"
 #define MyAppExeName "SoundShare.exe"
@@ -31,12 +31,90 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
-PrivilegesRequired=lowest
+; PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputBaseFilename=SoundShareSetup_v{#MyAppVersion}
 SignTool=UMU
 SolidCompression=yes
 WizardStyle=modern
+
+[Code]
+const
+  NET_FW_ACTION_ALLOW = 1;
+  NET_FW_RULE_DIR_IN = 1;
+  NET_FW_PROFILE2_DOMAIN = 1;
+  NET_FW_PROFILE2_PRIVATE = 2;
+  NET_FW_PROFILE2_PUBLIC = 4;
+  NET_FW_PROFILE2_ALL = NET_FW_PROFILE2_DOMAIN or NET_FW_PROFILE2_PRIVATE or NET_FW_PROFILE2_PUBLIC;
+
+procedure AddFirewallRule(const Name, Path: string);
+var
+  FwPolicy, FwRule, Rules: Variant;
+  AppPath: WideString;
+begin
+  try
+    FwPolicy := CreateOleObject('HNetCfg.FwPolicy2');
+    Rules := FwPolicy.Rules;
+
+    FwRule := CreateOleObject('HNetCfg.FwRule');
+    AppPath := Path;
+
+    FwRule.Name := Name;
+    FwRule.Description := 'Allow ' + Name;
+    FwRule.ApplicationName := AppPath;
+    FwRule.Enabled := True;
+    FwRule.Action := NET_FW_ACTION_ALLOW;
+    FwRule.Direction := NET_FW_RULE_DIR_IN;
+    FwRule.Profiles := NET_FW_PROFILE2_ALL;
+
+    Rules.Add(FwRule);
+  except
+    MsgBox('Failed to add firwall rule!', mbError, MB_OK);
+  end;
+end;
+
+procedure RemoveFirewallRule(const Name: string);
+var
+  FwPolicy, Rules, Rule: Variant;
+  Count, i: Integer;
+begin
+  try
+    FwPolicy := CreateOleObject('HNetCfg.FwPolicy2');
+    Rules := FwPolicy.Rules;
+
+    Count := Rules.Count;
+    for i := 1 to Count do
+    begin
+      try
+        Rule := Rules.Item(Name);
+        if Rule.Name = Name then
+        begin
+          Rules.Remove(Name);
+        end;
+      except
+        break;
+      end;
+    end;
+  except
+    MsgBox('Failed to remove firwall rule!', mbError, MB_OK);
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+  begin
+    AddFirewallRule('Regame_SoundShare', ExpandConstant('{app}\bin\{#MyAppExeName}'));
+  end;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usPostUninstall then
+  begin
+    RemoveFirewallRule('Regame_SoundShare');
+  end;
+end;
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
