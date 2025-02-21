@@ -2,10 +2,12 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SoundShare"
-#define MyAppVersion "2025.02.19"
+#define MyAppVersion "2025.02.21"
 #define MyAppPublisher "UMUTech"
 #define MyAppURL "https://umutech.com/"
 #define MyAppExeName "SoundShare.exe"
+#define MyApp2Name "MicShare"
+#define MyApp2ExeName "MicShare.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -46,6 +48,9 @@ const
   NET_FW_PROFILE2_PRIVATE = 2;
   NET_FW_PROFILE2_PUBLIC = 4;
   NET_FW_PROFILE2_ALL = NET_FW_PROFILE2_DOMAIN or NET_FW_PROFILE2_PRIVATE or NET_FW_PROFILE2_PUBLIC;
+
+function IsRunningAsAdmin(): Boolean;
+external 'IsUserAnAdmin@shell32.dll stdcall';
 
 procedure AddFirewallRule(const Name, Path: string);
 var
@@ -104,7 +109,11 @@ procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then
   begin
-    AddFirewallRule('Regame_SoundShare', ExpandConstant('{app}\bin\{#MyAppExeName}'));
+    if IsRunningAsAdmin then
+    begin
+      AddFirewallRule('Regame_{#MyAppName}', ExpandConstant('{app}\bin\{#MyAppExeName}'));
+      AddFirewallRule('Regame_{#MyApp2Name}', ExpandConstant('{app}\bin\{#MyApp2ExeName}'));
+    end;
   end;
 end;
 
@@ -112,7 +121,11 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usPostUninstall then
   begin
-    RemoveFirewallRule('Regame_SoundShare');
+    if IsRunningAsAdmin then
+      begin
+      RemoveFirewallRule('Regame_{#MyAppName}');
+      RemoveFirewallRule('Regame_{#MyApp2Name}');
+    end;
   end;
 end;
 
@@ -127,9 +140,13 @@ Source: ".\assets\*"; DestDir: "{app}\assets"; Flags: ignoreversion recursesubdi
 Source: ".\bin\avutil-59.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: ".\bin\{#MyAppExeName}"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: ".\bin\{#MyAppExeName}.en-US.mui"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: ".\bin\{#MyAppExeName}.zh-CN.mui"; DestDir: "{app}\bin"; Flags: 
+Source: ".\bin\{#MyAppExeName}.zh-CN.mui"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: ".\bin\{#MyApp2ExeName}"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: ".\bin\{#MyApp2ExeName}.en-US.mui"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: ".\bin\{#MyApp2ExeName}.zh-CN.mui"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: ".\bin\swresample-5.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: ".\bin\WebView2Loader.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: ".\bin\XAudio2_9Redist.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: ".\conf\*"; DestDir: "{app}\conf"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\licenses\*"; DestDir: "{app}\licenses"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\root\*"; DestDir: "{app}\root"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -137,7 +154,9 @@ Source: ".\root\*"; DestDir: "{app}\root"; Flags: ignoreversion recursesubdirs c
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"
+Name: "{autoprograms}\{#MyApp2Name}"; Filename: "{app}\bin\{#MyApp2ExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autodesktop}\{#MyApp2Name}"; Filename: "{app}\bin\{#MyApp2ExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\bin\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

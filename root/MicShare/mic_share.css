@@ -1,0 +1,103 @@
+#error {
+  margin-top: 20px;
+  font-size: 18px;
+  color: red;
+}
+
+.autocomplete {
+	position: relative;
+	width: 100%;
+}
+.autocomplete-items {
+	position: absolute;
+	border: 1px solid #ccc;
+	max-height: 150px;
+	overflow-y: auto;
+	margin: 0px 16px;
+	width: 100%;
+	max-width: 196px;
+	background: white;
+	z-index: 1000;
+}
+.autocomplete-item {
+	padding: 8px;
+	cursor: pointer;
+}
+.autocomplete-item.active {
+	background: #007bff !important;
+	color: white;
+}
+.autocomplete-item:hover {
+	background: #f0f0f0;
+}
+.hcombo {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+.vcombo {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-height: 150px;
+}
+
+.container {
+	text-align: center;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modern-input {
+	width: 100%;
+	max-width: 196px;
+	padding: 12px;
+	border: 2px solid #850000;
+	border-radius: 4px;
+	font-size: 16px;
+	transition: border-color 0.3s ease;
+}
+
+.modern-input:focus {
+	border-color: #85554D;
+	outline: none;
+	box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+.help-text {
+	display: block;
+	color: #666;
+	margin-top: 8px;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+	margin: 10px, 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+}
+
+button {
+	padding: 10px 20px;
+	font-size: 24px;
+	background-color: #850000;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: #85554D;
+}
