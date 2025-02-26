@@ -1,0 +1,35 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ScreenShare</title>
+	<link rel="icon" sizes="32x32" href="mic_share.png" type="image/png">
+	<link rel="stylesheet" href="mic_share.css">
+</head>
+<body>
+	<div class="container">
+		<h1>ScreenShare</h1>
+		<p><b>Client ID: </b><span id="clientId"></span></p>
+		<div class="hcombo">
+			<label for="urlInput">Server: </label>
+			<div class="autocomplete">
+				<input type="url"
+					id="urlInput"
+					placeholder="192.168.1.80:1218"
+					required
+					autocomplete="url"
+					aria-describedby="urlHelp"
+					class="modern-input" />
+				<div class="autocomplete-items" id="autocompleteList"></div>
+			</div>
+		</div>
+		<small id="urlHelp" class="help-text">Please enter the address and port of the server!</small>
+		<p>
+			<button id="start" onclick="start()">Start</button>
+			<button id="stop" style="display: none">Stop</button>
+		</p>
+	</div>
+	<div id="error" style="display: none"></div>
+	<script src="screen_share.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ScreenView</title>
+	<link rel="icon" sizes="32x32" href="screen_view.png" type="image/png">
+	<link rel="stylesheet" href="screen_view.css">
+</head>
+<body>
+	<div class="video-container">
+		<div id="error">Don't use this, unless you are a programmer!</div>
+		<p>
+			<button class="float-btn" id="start" onclick="start()">Start</button>
+			<button class="float-btn" id="stop" style="display: none">Stop</button>
+		</p>
+		<video id="video" autoplay playsinline>
+			<audio id="audio" autoplay playsinline></audio>
+		</video>
+	</div>
+	<script src="screen_view.js"></script>
+</body>
+</html>

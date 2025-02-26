@@ -1,0 +1,50 @@
+#error {
+  margin-top: 20px;
+  font-size: 18px;
+  color: red;
+}
+#error.hidden {
+	display: none;
+}
+
+#video-container {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+#video {
+	width: 100%;
+	height: 100%;
+	#object-fit: cover;
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+}
+
+.float-btn {
+	position: absolute;
+	top: 64px;
+	left: 32px;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	z-index: 10;
+	color: #fff;
+	background-color: #850000;
+	border: none;
+	border-radius: 5px;
+}
+
+.float-btn.hidden {
+	display: none;
+}
+
+body {
+	border: none;
+	margin: 0;
+}
