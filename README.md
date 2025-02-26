@@ -9,3 +9,9 @@
 ## Copyright Information
 
 **SoundShare**, **MicShare** are free software, and it is prohibited for anyone to resell it! If you find it useful, please help promote it. Your assistance is greatly appreciated!
+
+## About Self-Signed Certificates
+
+For details, visit: <https://blog.umu618.com/about/cert.html>
+
+Fingerprint: **ff8a8160116e35775506d0dd86360935877aaf3b**
