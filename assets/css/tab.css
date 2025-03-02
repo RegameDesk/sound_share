@@ -1,0 +1,81 @@
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+	background-color: #f9f9f9;
+}
+
+h2 {
+	margin-bottom: 10px;
+}
+
+img {
+	max-width: 100%;
+	border-radius: 8px;
+	margin-top: 10px;
+}
+
+p {
+	margin: 8px;
+}
+
+.donate {
+	margin: 8px;
+}
+
+.tab-container {
+	max-width: 640px;
+	margin: 0 auto;
+}
+
+.tab-nav {
+	display: flex;
+	border-bottom: 2px solid #ddd;
+	margin-bottom: 0px;
+}
+
+.tab-button {
+	padding: 12px 24px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	color: #666;
+	transition: all 0.3s ease;
+	position: relative;
+}
+
+.tab-button.active {
+	color: #850000;
+	font-weight: bold;
+}
+
+.tab-button.active::after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: #850000;
+}
+
+.tab-content {
+	display: none;
+	padding: 20px;
+	background: #fff;
+	border-radius: 0 0 4px 4px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	animation: fadeIn 0.3s ease;
+	margin-bottom: 20px;
+}
+
+.tab-content.active {
+	display: block;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(10px); }
+	to { opacity: 1; transform: translateY(0); }
+}

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>麦克风共享</title>
-	<link rel="stylesheet" type="text/css" href="umu-red.css" />
+	<link rel="stylesheet" type="text/css" href="css/umu-red.css" />
 </head>
 <body>
 	<p id="donate" class="donate" align="right">如果<span style="color: red;">喜欢</span>本程序，可以<a href="donate.html" target="_blank">资助</a>作者继续完善！</p>
@@ -43,9 +43,9 @@
 			<p id="step4_text">目前只支持 VoiceMeeter v1.0.8.8，如果不安装，声音将直接在本机播放！</p>
 			<ul>
 				<li id="dl_vm"><a href="https://pan.baidu.com/s/1oFOBhidFp8NJ75SRU41gnQ?pwd=7dfu" target="_blank">下载</a>并安装虚拟声卡；</li>
-				<img src="vm_4_mic_share.png" />
+				<img src="images/vm_4_mic_share.png" />
 				<li id="use_vm">在电脑上使用 VoiceMeeter Output 作为音频输入设备。</li>
-				<img src="vm.png" />
+				<img src="images/vm.png" />
 			</ul>
 			<div class="nav-buttons">
 				<button id="step4_back" onclick="prevStep(3)">上一步</button>
@@ -57,9 +57,9 @@
 			<h2 id="step5_title">高级设置</h2>
 			<p id="step5_text">以下功能需要修改注册表，并重开本应用后生效：</p>
 			<ul>
-				<li id="ipv6"><b>启用 IPv6：</b>为安全考虑，默认禁用 IPv6！<a href="ms_ipv6.png" target="_blank">查看</a></li>
-				<li id="log"><b>日志设定：</b>修改日志的开关、保存路径、等级。<a href="ms_log.png" target="_blank">查看</a></li>
-				<li id="port"><b>监听端口：</b>修改绑定地址和监听端口。<a href="ms_port.png" target="_blank">查看</a></li>
+				<li id="ipv6"><b>启用 IPv6：</b>为安全考虑，默认禁用 IPv6！<a href="images/ms_ipv6.png" target="_blank">查看</a></li>
+				<li id="log"><b>日志设定：</b>修改日志的开关、保存路径、等级。<a href="images/ms_log.png" target="_blank">查看</a></li>
+				<li id="port"><b>监听端口：</b>修改绑定地址和监听端口。<a href="images/ms_port.png" target="_blank">查看</a></li>
 				<li id="skey"><b>自定义 SSL 证书：</b>请将您自己的 cert.pem 和 key.pem 放在 %LocalAppData%\UMUTech\SoundShare\run 目录下。</li>
 			</ul>
 			<div class="nav-buttons">
@@ -78,23 +78,10 @@
 			</div>
 		</div>
 	</div>
-	<script src="mui.js"></script>
+	<script src="js/mui.js"></script>
 	<script>
-		mui(['zh-CN', 'en-US'], 'ms-')
-		function nextStep(step) {
-			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
-			document.getElementById(`step${step}`).classList.remove('hidden');
-		}
-
-		function prevStep(step) {
-			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
-			document.getElementById(`step${step}`).classList.remove('hidden');
-		}
-
-		function restart() {
-			document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
-			document.getElementById('step1').classList.remove('hidden');
-		}
+		mui(['zh-CN', 'en-US'], 'mui/ms-')
 	</script>
+	<script src="js/step.js"></script>
 </body>
 </html>
